@@ -1,0 +1,79 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+.container {
+    background-color: #8a2be2;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    max-width: 500px;
+    width: 100%;
+}
+h1 {
+    color: #ffd700;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.input-group {
+    width:500px;
+    display: flex;
+    margin-bottom: 10px;
+}
+input {
+    flex-grow: 1;
+    padding: 10px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 5px;
+}
+button {
+    padding: 10px 15px;
+    background-color: #ffd700;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+button:hover {
+    background-color: #e6c200;
+}
+#exerciseList {
+    background-color: #40e0d0;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+.exercise-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    padding: 5px;
+    background-color: #ffffff;
+    border-radius: 3px;
+}
+#currentExercise, #timer {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+#startButton {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #32cd32;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+#startButton:hover {
+    background-color: #28a428;
+}
