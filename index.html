@@ -8,16 +8,33 @@
 </head>
 <body>
     <div class="container">
-        <h1>Track Your Reps & Time Efficiently</h1>
-        <div class="input-group">
-            <input type="text" id="exerciseName" placeholder="Add Your Exercise">
-            <input type="number" id="exerciseDuration" placeholder="Time (seconds)">
-            <button onclick="addExercise()">Add</button>
+        <h1 id="name">Exercise Tracker</h1>
+        <button id="begin">Begin WorkOut</button>
+        <div id="exercisePage">
+            <div class="input-group">
+                <label for="exerciseName">Exercise Name:</label>
+                <input type="text" id="exerciseName" placeholder="Enter exercise name">
+            </div>
+            <div class="input-group">
+                <label for="exerciseDuration">Duration (seconds):</label>
+                <input type="number" id="exerciseDuration" placeholder="Enter duration in seconds">
+            </div>
+            <button id="addExercise">Add Exercise</button>
+            <h2 >Exercise List</h2>
+            <ul id="exerciseList"></ul>
+            <button id="startExercises" disabled><a href="#timer">Start Exercises</a></button>
+            <div class="current-exercise" id="currentExercise" style="display: none;">
+                <h3 id="exerciseTitle"></h3>
+                <div class="timer" id="timer"></div>
+                <button id="skipExercise" style="display: none;">Skip</button>
+            </div>
+            <button id="endEarly" style="display: none;">End Early</button>
         </div>
-        <div id="exerciseList"></div>
-        <div id="currentExercise"></div>
-        <div id="timer"></div>
-        <button id="startButton" onclick="startWorkout()">Begin Workout</button>
+        <div id="summaryPage">
+            <h1>Exercise Summary</h1>
+            <div id="summaryList"></div>
+            <button id="restartExercises">Restart Exercises</button>
+        </div>
     </div>
 
     <script src="script.js"></script>

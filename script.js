@@ -1,85 +1,170 @@
+let exerciseDuration = document.getElementById('exerciseDuration');
+let addExerciseBtn = document.getElementById('addExercise');
+let exerciseList = document.getElementById('exerciseList');
+let startExercisesBtn = document.getElementById('startExercises');
+let currentExercise = document.getElementById('currentExercise');
+let exerciseTitle = document.getElementById('exerciseTitle');
+let timer = document.getElementById('timer');
+let skipExerciseBtn = document.getElementById('skipExercise');
+let endEarlyBtn = document.getElementById('endEarly');
+let exercisePage = document.getElementById('exercisePage');
+let summaryPage = document.getElementById('summaryPage');
+let summaryList = document.getElementById('summaryList');
+let btn=document.getElementById("begin");
+let restartExercisesBtn = document.getElementById('restartExercises');
+
 let exercises = [];
 let currentExerciseIndex = 0;
 let timeLeft = 0;
+let isBreak = false;
+let isRunning = false;
 let timerInterval;
+let executionTimes = [];
+
+addExerciseBtn.addEventListener('click', addExercise);
+startExercisesBtn.addEventListener('click', startExercises);
+skipExerciseBtn.addEventListener('click', skipExercise);
+endEarlyBtn.addEventListener('click', endEarly);
+restartExercisesBtn.addEventListener('click', restartExercises);
+btn.addEventListener('click',begintoWorkout);
 
 function addExercise() {
-    const name = document.getElementById('exerciseName').value;
-    const duration = parseInt(document.getElementById('exerciseDuration').value);
-    if (name && duration) {
+    const name = exerciseName.value.trim();
+    exerciseList.style.display = 'block';
+    const duration = parseInt(exerciseDuration.value);
+    if (name && duration > 0) {
         exercises.push({ name, duration });
         updateExerciseList();
-        document.getElementById('exerciseName').value = '';
-        document.getElementById('exerciseDuration').value = '';
+        exerciseName.value = '';
+        exerciseDuration.value = '';
+        startExercisesBtn.disabled = false;
     }
 }
 
 function updateExerciseList() {
-    const list = document.getElementById('exerciseList');
-    list.innerHTML = '';
-    exercises.forEach(exercise => {
-        const item = document.createElement('div');
-        item.className = 'exercise-item';
-        item.textContent = `${exercise.name} - ${formatTime(exercise.duration)};` // Corrected here
-        list.appendChild(item);
+    exerciseList.innerHTML = '';
+    exercises.forEach((exercise, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${exercise.name} - ${exercise.duration}s`;
+        exerciseList.appendChild(li);
     });
 }
 
-function startWorkout() {
+function startExercises() {
     if (exercises.length > 0) {
         currentExerciseIndex = 0;
-        startExercise();
+        executionTimes = [];
+        startNextExercise();
+        startExercisesBtn.style.display = 'none';
+        endEarlyBtn.style.display = 'inline-block';
+        isRunning = true;
     }
 }
 
-function startExercise() {
-    const exercise = exercises[currentExerciseIndex];
-    document.getElementById('currentExercise').textContent = exercise.name;
-    timeLeft = exercise.duration;
-    updateTimerDisplay();
-    timerInterval = setInterval(updateTimer, 1000);
-    document.getElementById('startButton').textContent = 'Pause';
-    document.getElementById('startButton').onclick = pauseResume;
+function startNextExercise() {
+    if (currentExerciseIndex < exercises.length) {
+        const exercise = exercises[currentExerciseIndex];
+        exerciseTitle.textContent = exercise.name;
+        timeLeft = exercise.duration;
+        currentExercise.style.display = 'block';
+        skipExerciseBtn.style.display = 'inline-block';
+        isBreak = false;
+        updateTimer();
+        startTimer();
+    } else {
+        navigateToSummary();
+    }
+}
+
+function startBreak() {
+    exerciseTitle.textContent = 'Break Time';
+    timeLeft = 30;
+    isBreak = true;
+    skipExerciseBtn.style.display = 'none';
+    updateTimer();
+    startTimer();
+}
+
+function startTimer() {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimer();
+        if (timeLeft === 0) {
+            clearInterval(timerInterval);
+            if (isBreak) {
+                currentExerciseIndex++;
+                startNextExercise();
+            } else {
+                executionTimes.push(exercises[currentExerciseIndex].duration);
+                startBreak();
+            }
+        }
+    }, 1000);
 }
 
 function updateTimer() {
-    timeLeft--;
-    updateTimerDisplay();
-    if (timeLeft === 0) {
-        clearInterval(timerInterval);
-        currentExerciseIndex++;
-        if (currentExerciseIndex < exercises.length) {
-            startExercise();
-        } else {
-            endWorkout();
-        }
-    }
+    timer.textContent = `${timeLeft}s`;
 }
 
-function updateTimerDisplay() {
-    document.getElementById('timer').textContent = formatTime(timeLeft);
-}
-
-function formatTime(seconds) {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')};` // Corrected here
-}
-
-function pauseResume() {
-    if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-        document.getElementById('startButton').textContent = 'Resume';
+function skipExercise() {
+    clearInterval(timerInterval);
+    executionTimes.push(exercises[currentExerciseIndex].duration - timeLeft);
+    currentExerciseIndex++;
+    if (currentExerciseIndex < exercises.length) {
+        startNextExercise();
     } else {
-        timerInterval = setInterval(updateTimer, 1000);
-        document.getElementById('startButton').textContent = 'Pause';
+        navigateToSummary();
     }
 }
 
-function endWorkout() {
-    document.getElementById('currentExercise').textContent = 'Workout Complete!';
-    document.getElementById('timer').textContent = '';
-    document.getElementById('startButton').textContent = 'Begin Workout';
-    document.getElementById('startButton').onclick = startWorkout;
+function endEarly() {
+    clearInterval(timerInterval);
+    if (!isBreak) {
+        executionTimes.push(exercises[currentExerciseIndex].duration - timeLeft);
+    }
+    navigateToSummary();
+}
+function begintoWorkout(){
+    exercisePage.style.display='block';
+    summaryPage.style.display = 'none';
+    currentExercise.style.display = 'none';
+    exerciseList.style.display = 'none';
+    exerciseList.innerHTML = '';
+}
+
+function navigateToSummary() {
+    isRunning = false;
+    exercisePage.style.display = 'none';
+    summaryPage.style.display = 'block';
+    displaySummary();
+}
+
+function displaySummary() {
+    summaryList.innerHTML = '';
+    exercises.forEach((exercise, index) => {
+        const div = document.createElement('div');
+        div.className = 'summary-item';
+        div.innerHTML = `
+            <span>${exercise.name}</span>
+            <span>Planned: ${exercise.duration}s, Actual: ${executionTimes[index] || 0}s</span>
+        `;
+        summaryList.appendChild(div);
+    });
+}
+
+function restartExercises() {
+    exercises = [];
+    currentExerciseIndex = 0;
+    timeLeft = 0;
+    isBreak = false;
+    isRunning = false;
+    executionTimes = [];
+    updateExerciseList();
+    exercisePage.style.display = 'none';
+    summaryPage.style.display = 'none';
+    currentExercise.style.display = 'none';
+    startExercisesBtn.style.display = 'inline-block';
+    startExercisesBtn.disabled = true;
+    endEarlyBtn.style.display = 'none';
 }
