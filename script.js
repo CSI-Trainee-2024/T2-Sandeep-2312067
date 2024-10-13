@@ -13,7 +13,8 @@ let summaryList = document.getElementById('summaryList');
 let btn=document.getElementById("begin");
 let restartExercisesBtn = document.getElementById('restartExercises');
 
-let exercises = [];
+
+let exercises = JSON.parse(localStorage.getItem('exercises')) || [];
 let currentExerciseIndex = 0;
 let timeLeft = 0;
 let isBreak = false;
@@ -39,6 +40,7 @@ function addExercise() {
         exerciseDuration.value = '';
         startExercisesBtn.disabled = false;
     }
+    saveData();
 }
 
 function updateExerciseList() {
@@ -116,6 +118,7 @@ function skipExercise() {
     } else {
         navigateToSummary();
     }
+    saveData();
 }
 
 function endEarly() {
@@ -167,4 +170,12 @@ function restartExercises() {
     startExercisesBtn.style.display = 'inline-block';
     startExercisesBtn.disabled = true;
     endEarlyBtn.style.display = 'none';
+    saveData();
 }
+
+function saveData() {
+    localStorage.setItem('exercises', JSON.stringify(exercises));
+}
+window.onload = () => {
+    updateExerciseList();
+};
