@@ -9,9 +9,12 @@ body {
     padding: 20px;
     margin-top: 25px;
     background-image:url(exercise.jpg);
+    background-position: center; 
+    background-attachment: fixed;
     background-size: cover;
     overflow-x:hidden ;
 }
+
 #exercisePage{
     display:none;
 }
@@ -134,3 +137,44 @@ li {
 .delete-btn:hover {
     color: darkred;
 }
+
+/* Tablets and small devices */
+@media (max-width: 768px) {
+    #begin {
+        width: 100%;
+        font-size: 22px;
+        left: 0;
+    }
+
+    #name {
+        font-size: 8vw;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    #name {
+        font-size: 10vw;
+    }
+
+    #begin {
+        font-size: 18px;
+        width: 100%;
+        left: 0;
+        bottom: 0;
+    }
+
+    label {
+        font-size: 14px;
+        height: auto;
+    }
+    
+    input {
+        width: 100%;
+    }
+}
+

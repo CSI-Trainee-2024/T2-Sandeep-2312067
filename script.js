@@ -85,10 +85,10 @@ function startNextExercise() {
         isBreak = false;
         updateTimer();
         startTimer();
+        saveData();
     } else {
         navigateToSummary();
     }
-    saveData();
 }
 
 function startBreak() {
@@ -111,6 +111,7 @@ function startTimer() {
             if (isBreak) {
                 currentExerciseIndex++;
                 startNextExercise();
+                saveData();
             } else {
                 executionTimes.push(exercises[currentExerciseIndex].duration);
                 startBreak();
@@ -192,13 +193,11 @@ function restartExercises() {
     saveData();
 }
 
-
-showExercise();
-function saveData(){
-    localStorage.setItem("data",exerciseList.innerHTML);
-}
-function showExercise(){
-    exerciseList.innerHTML=localStorage.getItem("data");
+function saveData() {
+    localStorage.setItem('exercises', JSON.stringify(exercises));
+    localStorage.setItem('currentExerciseIndex', currentExerciseIndex);
+    localStorage.setItem('timeLeft', timeLeft);
+    localStorage.setItem('isRunning', isRunning);
 }
 
 
