@@ -58,14 +58,14 @@ h1 {
 }
 label {
     display: block;
-    border:2px black solid;
     color:white;
-    background-color: #010d32;
+    background-color: #0b0b9c;
     border-radius: 10px;
     margin-bottom: 5px;
+    padding-left:10px;
 }
 input {
-    width: 100%;
+    width: 97%;
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -115,4 +115,17 @@ li {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: red;
+    font-size: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.delete-btn:hover {
+    color: darkred;
 }

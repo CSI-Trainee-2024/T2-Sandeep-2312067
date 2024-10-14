@@ -42,14 +42,25 @@ function addExercise() {
     }
     saveData();
 }
-
 function updateExerciseList() {
     exerciseList.innerHTML = '';
     exercises.forEach((exercise, index) => {
         const li = document.createElement('li');
-        li.textContent = `${exercise.name} - ${exercise.duration}s`;
+        li.textContent = `${exercise.name} - ${exercise.duration}s `;
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = '&times;';
+        deleteBtn.className = 'delete-btn'; 
+        deleteBtn.onclick = () => deleteExercise(index);
+
+        li.appendChild(deleteBtn);
         exerciseList.appendChild(li);
     });
+}
+function deleteExercise(index) {
+    exercises.splice(index, 1);
+    updateExerciseList();       
+    saveData();                 
 }
 
 function startExercises() {
@@ -61,6 +72,7 @@ function startExercises() {
         endEarlyBtn.style.display = 'inline-block';
         isRunning = true;
     }
+    saveData();
 }
 
 function startNextExercise() {
@@ -76,6 +88,7 @@ function startNextExercise() {
     } else {
         navigateToSummary();
     }
+    saveData();
 }
 
 function startBreak() {
@@ -85,6 +98,7 @@ function startBreak() {
     skipExerciseBtn.style.display = 'none';
     updateTimer();
     startTimer();
+    saveData();
 }
 
 function startTimer() {
@@ -102,11 +116,13 @@ function startTimer() {
                 startBreak();
             }
         }
+        saveData();
     }, 1000);
 }
 
 function updateTimer() {
     timer.textContent = `${timeLeft}s`;
+    saveData();
 }
 
 function skipExercise() {
@@ -127,6 +143,7 @@ function endEarly() {
         executionTimes.push(exercises[currentExerciseIndex].duration - timeLeft);
     }
     navigateToSummary();
+    saveData();
 }
 function begintoWorkout(){
     exercisePage.style.display='block';
@@ -134,6 +151,7 @@ function begintoWorkout(){
     currentExercise.style.display = 'none';
     exerciseList.style.display = 'none';
     exerciseList.innerHTML = '';
+    saveData();
 }
 
 function navigateToSummary() {
@@ -154,6 +172,7 @@ function displaySummary() {
         `;
         summaryList.appendChild(div);
     });
+
 }
 
 function restartExercises() {
@@ -173,9 +192,14 @@ function restartExercises() {
     saveData();
 }
 
-function saveData() {
-    localStorage.setItem('exercises', JSON.stringify(exercises));
+
+showExercise();
+function saveData(){
+    localStorage.setItem("data",exerciseList.innerHTML);
 }
-window.onload = () => {
-    updateExerciseList();
-};
+function showExercise(){
+    exerciseList.innerHTML=localStorage.getItem("data");
+}
+
+
+
